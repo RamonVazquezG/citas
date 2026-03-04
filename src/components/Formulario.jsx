@@ -12,6 +12,19 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
     const [sintomas, setSintomas] = useState('');
     const [error, setError] = useState({});
 
+    const notify = () => toast('Paciente Registrado');
+    const notifyEdit = () => toast('Cambios Guardados');
+
+    useEffect(() =>{
+        if(Object.keys(paciente).length > 0){
+            setNombre(paciente.nombre || '')
+            setPropietario(paciente.propietario || '')
+            setEmail(paciente.email || '')
+            setFecha (paciente.fecha || '')
+            setSintomas(paciente.sintomas || '')
+        }
+    }, [paciente])
+
     const pacienteSchema = z.object({
         nombre: z
             .string()
@@ -39,18 +52,6 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
             .min(10, "Describe los síntomas con al menos 10 caracteres"),
     });
     
-    const notify = () => toast('Paciente Registrado');
-    const notifyEdit = () => toast('Cambios Guardados');
-
-    useEffect(() =>{
-        if(Object.keys(paciente).length > 0){
-            setNombre(paciente.nombre || '')
-            setPropietario(paciente.propietario || '')
-            setEmail(paciente.email || '')
-            setFecha (paciente.fecha || '')
-            setSintomas(paciente.sintomas || '')
-        }
-    }, [paciente])
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -89,11 +90,12 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
         setError(false)
 
         const objetoPaciente = resultado.data;
+        
 
         if(paciente && paciente.id){
             objetoPaciente.id = paciente.id
-            const pacienteActualizados = paciente.map(p => p.id === paciente.id ? objetoPaciente : p)
-            setPaciente(pacienteActualizados)
+            const pacientesActualizados = pacientes.map(p => p.id === paciente.id ? objetoPaciente : p)
+            setPacientes(pacientesActualizados)
             setPaciente({})
             notifyEdit()
         } else {
@@ -103,12 +105,11 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
         }
 
         setNombre('');
-        setPropiedad('');
+        setPropietario('');
         setEmail('');
         setFecha('');
         setSintomas('');
 
-        notify();
     };
 
 
