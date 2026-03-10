@@ -2,7 +2,13 @@
 import { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import { z } from 'zod';
-import { AcademicCapIcon } from "@heroicons/react/24/outline";
+import {
+    CalendarDaysIcon,
+    EnvelopeIcon,
+    ExclamationCircleIcon,
+    SparklesIcon,
+    UserIcon,
+} from "@heroicons/react/24/outline";
 
 const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
     const [nombre, setNombre] = useState('');
@@ -14,6 +20,10 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
 
     const notify = () => toast('Paciente Registrado');
     const notifyEdit = () => toast('Cambios Guardados');
+
+    const inputBaseClasses = "mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none transition duration-200 focus:border-cyan-400/60 focus:ring-4 focus:ring-cyan-400/10";
+    const labelBaseClasses = "mb-1 block text-sm font-semibold uppercase tracking-[0.2em] text-slate-300";
+    const errorTextClasses = "mt-2 inline-flex items-center gap-2 rounded-full border border-rose-400/20 bg-rose-400/10 px-3 py-1 text-sm text-rose-200";
 
     useEffect(() =>{
         if(Object.keys(paciente).length > 0){
@@ -87,7 +97,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
             return;
         }
 
-        setError(false)
+        setError({})
 
         const objetoPaciente = resultado.data;
         
@@ -109,144 +119,171 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
         setEmail('');
         setFecha('');
         setSintomas('');
-
     };
 
-
-
     return (
-        <div className="md:w-1/2 lg:w2/5">
-            <h2 className="font-black text-3xl text-center">Seguimiento Pacientes</h2>
-            <p className="text-lg mt-5 text-center mb-10">
-                Añade Pacientes y {''}
-                <span className="text-indigo-600 font-bold ">Admistralos</span>
-            </p>
-
-            <form className="bg-white shadow-md rounded-lg py-10 px-5 mb-10" onSubmit={handleSubmit}>
-
-
-                <div className="mb-5">
-
-                    <AcademicCapIcon className="h-6 w-6 text-gray-500" />
-
-                    <label className="block text-gray-700 uppercase font-bold" htmlFor="mascota">
-                        Nombre Mascota
-                    </label>
-                    <input
-                        type="text"
-                        id="mascota"
-                        placeholder="Nombre de la mascota"
-                        className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                        value={nombre}
-                        onChange={e => setNombre(e.target.value)}
-                    />
-
-                    {error?.nombre?._errors[0] && (
-                        <p className="text-red-500 text-sm">
-                            {error.nombre._errors[0]}
-                        </p>
-                    )}
-
+        <section className="rounded-4xl border border-white/10 bg-white/8 p-5 shadow-2xl shadow-slate-950/30 backdrop-blur-xl sm:p-6 lg:p-7">
+            <div className="mb-6 flex items-start justify-between gap-4">
+                <div>
+                    <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">
+                        <SparklesIcon className="h-4 w-4" />
+                        Registro clínico
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                        <span className="rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-300">🐾 Ficha veterinaria</span>
+                        <span className="rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-300">🩺 Evaluación</span>
+                        <span className="rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-300">💙 Cuidado animal</span>
+                    </div>
+                    <h2 className="mt-4 text-3xl font-black text-white">{paciente?.id ? 'Actualizar paciente' : 'Nuevo paciente'}</h2>
+                    <p className="mt-2 max-w-xl text-sm leading-6 text-slate-300 sm:text-base">
+                        Completa la ficha con información clara y bien estructurada para una atención más eficiente.
+                    </p>
                 </div>
 
-                <div className="mb-5">
-                    <label className="block text-gray-700 uppercase font-bold" htmlFor="propietario">
-                        Nombre Propietario
-                    </label>
-                    <input
-                        type="text"
-                        id="propietario"
-                        placeholder="Nombre del propietario"
-                        className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                        value={propietario}
-                        onChange={e => setPropietario(e.target.value)}
+                <div className="hidden rounded-3xl border border-white/10 bg-slate-900/70 px-4 py-3 text-right sm:block">
+                    <p className="text-xs uppercase tracking-[0.22em] text-slate-500">Registros</p>
+                    <p className="text-2xl font-black text-white">{pacientes.length}</p>
+                </div>
+            </div>
 
-
-                    />
-
-                    {error?.propietario?._errors[0] && (
-                        <p className="text-red-500 text-sm">
-                            {error.propietario._errors[0]}
-                        </p>
-                    )}
-
+            <form className="space-y-5" onSubmit={handleSubmit}>
+                <div className="rounded-[1.5rem] border border-emerald-400/15 bg-emerald-400/5 px-4 py-3 text-sm leading-6 text-emerald-100">
+                    <span className="mr-2">🐶</span>
+                    Registra antecedentes y síntomas con lenguaje claro para agilizar la atención en consulta.
                 </div>
 
-                <div className="mb-5">
-                    <label className="block text-gray-700 uppercase font-bold" htmlFor="email">
-                        Email
-                    </label>
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="Dirección de email"
-                        className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
+                <div className="grid gap-5 xl:grid-cols-2">
+                    <div>
+                        <label className={labelBaseClasses} htmlFor="mascota">
+                            <span className="mb-2 flex items-center gap-2 text-slate-300">
+                                <UserIcon className="h-5 w-5 text-cyan-300" />
+                                Nombre de la mascota
+                            </span>
+                        </label>
+                        <input
+                            type="text"
+                            id="mascota"
+                            placeholder="Ej. Luna"
+                            className={inputBaseClasses}
+                            value={nombre}
+                            onChange={e => setNombre(e.target.value)}
+                        />
 
+                        {error?.nombre?._errors[0] && (
+                            <p className={errorTextClasses}>
+                                <ExclamationCircleIcon className="h-4 w-4" />
+                                {error.nombre._errors[0]}
+                            </p>
+                        )}
+                    </div>
 
-                    />
+                    <div>
+                        <label className={labelBaseClasses} htmlFor="propietario">
+                            <span className="mb-2 flex items-center gap-2 text-slate-300">
+                                <UserIcon className="h-5 w-5 text-cyan-300" />
+                                Nombre del propietario
+                            </span>
+                        </label>
+                        <input
+                            type="text"
+                            id="propietario"
+                            placeholder="Ej. Carlos Hernández"
+                            className={inputBaseClasses}
+                            value={propietario}
+                            onChange={e => setPropietario(e.target.value)}
+                        />
 
-                    {error?.email?._errors[0] && (
-                        <p className="text-red-500 text-sm">
-                            {error.email._errors[0]}
-                        </p>
-                    )}
+                        {error?.propietario?._errors[0] && (
+                            <p className={errorTextClasses}>
+                                <ExclamationCircleIcon className="h-4 w-4" />
+                                {error.propietario._errors[0]}
+                            </p>
+                        )}
+                    </div>
 
+                    <div>
+                        <label className={labelBaseClasses} htmlFor="email">
+                            <span className="mb-2 flex items-center gap-2 text-slate-300">
+                                <EnvelopeIcon className="h-5 w-5 text-cyan-300" />
+                                Correo electrónico
+                            </span>
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="cliente@correo.com"
+                            className={inputBaseClasses}
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
+
+                        {error?.email?._errors[0] && (
+                            <p className={errorTextClasses}>
+                                <ExclamationCircleIcon className="h-4 w-4" />
+                                {error.email._errors[0]}
+                            </p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label className={labelBaseClasses} htmlFor="alta">
+                            <span className="mb-2 flex items-center gap-2 text-slate-300">
+                                <CalendarDaysIcon className="h-5 w-5 text-cyan-300" />
+                                Fecha de alta
+                            </span>
+                        </label>
+                        <input
+                            type="date"
+                            id="alta"
+                            className={inputBaseClasses}
+                            value={fecha}
+                            onChange={e => setFecha(e.target.value)}
+                        />
+
+                        {error?.fecha?._errors[0] && (
+                            <p className={errorTextClasses}>
+                                <ExclamationCircleIcon className="h-4 w-4" />
+                                {error.fecha._errors[0]}
+                            </p>
+                        )}
+                    </div>
                 </div>
 
-                <div className="mb-5">
-                    <label className="block text-gray-700 uppercase font-bold" htmlFor="alta">
-                        Fecha de alta
-                    </label>
-                    <input
-                        type="date"
-                        id="alta"
-                        className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                        value={fecha}
-                        onChange={e => setFecha(e.target.value)}
-
-
-                    />
-
-                    {error?.fecha?._errors[0] && (
-                        <p className="text-red-500 text-sm">
-                            {error.fecha._errors[0]}
-                        </p>
-                    )}
-
-                </div>
-
-                <div className="mb-5">
-                    <label className="block text-gray-700 uppercase font-bold" htmlFor="mascota">
-                        Sintomas de la mascota
+                <div>
+                    <label className={labelBaseClasses} htmlFor="sintomas">
+                        Síntomas y observaciones
                     </label>
                     <textarea
                         id="sintomas"
-                        placeholder="Describe los sintomas"
-                        className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+                        rows="5"
+                        placeholder="Describe signos clínicos, comportamientos o notas relevantes"
+                        className={`${inputBaseClasses} resize-none`}
                         value={sintomas}
                         onChange={e => setSintomas(e.target.value)}
-
-
                     />
 
                     {error?.sintomas?._errors[0] && (
-                        <p className="text-red-500 text-sm">
+                        <p className={errorTextClasses}>
+                            <ExclamationCircleIcon className="h-4 w-4" />
                             {error.sintomas._errors[0]}
                         </p>
                     )}
-
                 </div>
 
-                <input
-                    type="submit"
-                    className=" bg-indigo-600 w-full p-3 text-white uppercase font-bold
-           hover:bg-indigo-700 transition-all"
-                    value="Agregar Paciente"
-                />
+                <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-sm leading-6 text-slate-400">
+                        Usa información precisa para ofrecer una experiencia más confiable y profesional.
+                    </p>
+
+                    <button
+                        type="submit"
+                        className="inline-flex items-center justify-center rounded-2xl bg-linear-to-r from-cyan-400 via-blue-500 to-indigo-500 px-6 py-3 text-sm font-bold uppercase tracking-[0.24em] text-slate-950 transition duration-200 hover:scale-[1.01] hover:shadow-lg hover:shadow-cyan-500/20"
+                    >
+                        {paciente?.id ? 'Guardar cambios' : 'Agregar paciente'}
+                    </button>
+                </div>
             </form>
-        </div>
+        </section>
     )
 }
 
