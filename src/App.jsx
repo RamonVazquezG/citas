@@ -1,14 +1,30 @@
 import Header from "./components/Header.jsx"
 import ListadoPacientes from "./components/ListadoPacientes.jsx"
 import Formulario from "./components/Formulario.jsx"
-import {useState} from "react"
+import {useState, useEffect} from "react"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
 
-  const [pacientes, setPacientes] = useState([])
+  const [pacientes, setPacientes] = useState(() => {
+    try {
+      const stored = localStorage.getItem('pacientes')
+      return stored ? JSON.parse(stored) : []
+    } catch (error) {
+      console.error('Error al leer localStorage', error)
+      return []
+    }
+  })
   const [paciente, setPaciente] = useState({})
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('pacientes', JSON.stringify(pacientes))
+    } catch (error) {
+      console.error('Error al guardar en localStorage', error)
+    }
+  }, [pacientes])
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100">
