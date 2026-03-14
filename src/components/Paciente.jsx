@@ -4,7 +4,8 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 
 const Paciente = ({ paciente, setPaciente, setPacientes }) => {
 
-    const { nombre, propietario, email, fecha, sintomas, id } = paciente
+    const { nombre, propietario, email, fecha, especie, sintomas, id } = paciente
+
 
     const fechaFormateada = new Intl.DateTimeFormat('es-MX', {
         dateStyle: 'long',
@@ -55,28 +56,34 @@ const Paciente = ({ paciente, setPaciente, setPacientes }) => {
                 </div>
 
                 <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Especie</p>
+                    <p className="mt-2 text-sm leading-7 text-slate-300 sm:text-base">{especie}</p>
+                </div>
+
+                <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Síntomas</p>
                     <p className="mt-2 text-sm leading-7 text-slate-300 sm:text-base">{sintomas}</p>
                 </div>
 
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
-                <button
-                    type="button"
-                    className="inline-flex items-center justify-center gap-2 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-200 transition hover:border-cyan-300/40 hover:bg-cyan-400/15"
-                    onClick={() => setPaciente(paciente)}
-                >
-                    <PencilSquareIcon className="h-5 w-5" />
-                    Editar
-                </button>
+                    <button
+                        type="button"
+                        className="inline-flex items-center justify-center gap-2 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-200 transition hover:border-cyan-300/40 hover:bg-cyan-400/15"
+                        onClick={() => setPaciente(paciente)}
+                    >
+                        <PencilSquareIcon className="h-5 w-5" />
+                        Editar
+                    </button>
 
-                <button
-                    type="button"
-                    className="inline-flex items-center justify-center gap-2 rounded-2xl border border-rose-400/20 bg-rose-400/10 px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-rose-200 transition hover:border-rose-300/40 hover:bg-rose-400/15"
-                    onClick={handleDelete}
-                >
-                    <TrashIcon className="h-5 w-5" />
-                    Eliminar
-                </button>
+                    <button
+                        type="button"
+                        className="inline-flex items-center justify-center gap-2 rounded-2xl border border-rose-400/20 bg-rose-400/10 px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-rose-200 transition hover:border-rose-300/40 hover:bg-rose-400/15"
+                        onClick={handleDelete}
+                    >
+                        <TrashIcon className="h-5 w-5" />
+                        Eliminar
+                    </button>
+
                 </div>
             </div>
         </article>

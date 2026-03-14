@@ -76,6 +76,7 @@ function App() {
             setPacientes={setPacientes}
             paciente={paciente}
             setPaciente={setPaciente}
+            modoEdicion={Boolean(paciente?.id)}
           />
 
           <ListadoPacientes

@@ -8,13 +8,15 @@ import {
     ExclamationCircleIcon,
     SparklesIcon,
     UserIcon,
+    BugAntIcon,
 } from "@heroicons/react/24/outline";
 
-const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
+const Formulario = ({ pacientes, setPacientes, paciente, setPaciente, modoEdicion }) => {
     const [nombre, setNombre] = useState('');
     const [propietario, setPropietario] = useState('');
     const [email, setEmail] = useState('');
     const [fecha, setFecha] = useState('');
+    const [especie, setEspecie] = useState('');
     const [sintomas, setSintomas] = useState('');
     const [error, setError] = useState({});
 
@@ -25,12 +27,13 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
     const labelBaseClasses = "mb-1 block text-sm font-semibold uppercase tracking-[0.2em] text-slate-300";
     const errorTextClasses = "mt-2 inline-flex items-center gap-2 rounded-full border border-rose-400/20 bg-rose-400/10 px-3 py-1 text-sm text-rose-200";
 
-    useEffect(() =>{
-        if(Object.keys(paciente).length > 0){
+    useEffect(() => {
+        if (Object.keys(paciente).length > 0) {
             setNombre(paciente.nombre || '')
             setPropietario(paciente.propietario || '')
             setEmail(paciente.email || '')
-            setFecha (paciente.fecha || '')
+            setFecha(paciente.fecha || '')
+            setEspecie(paciente.especie || '')
             setSintomas(paciente.sintomas || '')
         }
     }, [paciente])
@@ -57,11 +60,16 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                 message: "La fecha no puede ser futura",
             }),
 
+        especie: z
+            .enum(["perro", "gato", "conejo", "ave", "otro"], {
+                message: "Campo obligatorio, por favor elija la especie de su mascota"
+            }),
+
         sintomas: z
             .string()
             .min(10, "Describe los síntomas con al menos 10 caracteres"),
     });
-    
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -88,6 +96,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
             propietario,
             email,
             fecha,
+            especie,
             sintomas
         });
 
@@ -100,9 +109,9 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
         setError({})
 
         const objetoPaciente = resultado.data;
-        
 
-        if(paciente && paciente.id){
+
+        if (paciente && paciente.id) {
             objetoPaciente.id = paciente.id
             const pacientesActualizados = pacientes.map(p => p.id === paciente.id ? objetoPaciente : p)
             setPacientes(pacientesActualizados)
@@ -110,7 +119,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
             notifyEdit()
         } else {
             objetoPaciente.id = Date.now().toString()
-            setPacientes( [...pacientes, objetoPaciente])
+            setPacientes([...pacientes, objetoPaciente])
             notify()
         }
 
@@ -118,7 +127,24 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
         setPropietario('');
         setEmail('');
         setFecha('');
+        setEspecie('');
         setSintomas('');
+    };
+
+    const handleCancelar = () => {
+        // Limpiar el paciente seleccionado
+        setPaciente({});
+
+        // Regresar campos a nada
+        setNombre('');
+        setPropietario('');
+        setEmail('');
+        setFecha('');
+        setEspecie('');
+        setSintomas('');
+
+        // Limpiar cualquier error que pueda aparecer
+        setError({});
     };
 
     return (
@@ -128,11 +154,6 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                     <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">
                         <SparklesIcon className="h-4 w-4" />
                         Registro clínico
-                    </div>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                        <span className="rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-300">🐾 Ficha veterinaria</span>
-                        <span className="rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-300">🩺 Evaluación</span>
-                        <span className="rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-300">💙 Cuidado animal</span>
                     </div>
                     <h2 className="mt-4 text-3xl font-black text-white">{paciente?.id ? 'Actualizar paciente' : 'Nuevo paciente'}</h2>
                     <p className="mt-2 max-w-xl text-sm leading-6 text-slate-300 sm:text-base">
@@ -250,6 +271,37 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                 </div>
 
                 <div>
+                    <label className={labelBaseClasses} htmlFor="especie">
+                        <span className="mb-2 flex items-center gap-2 text-slate-300">
+                            <BugAntIcon className="h-5 w-5 text-cyan-300" />
+                            Especie
+                        </span>
+                    </label>
+                    <select
+                        type="text"
+                        id="especie"
+                        placeholder="Seleccione la especie de su mascota"
+                        className={inputBaseClasses}
+                        value={especie}
+                        onChange={e => setEspecie(e.target.value)}
+                    >
+                        <option value="default">Seleccione una opción...</option>
+                        <option value="perro">Perro</option>
+                        <option value="gato">Gato</option>
+                        <option value="conejo">Conejo</option>
+                        <option value="ave">Ave</option>
+                        <option value="otro">otro</option>
+                    </select>
+
+                    {error?.especie?._errors[0] && (
+                        <p className={errorTextClasses}>
+                            <ExclamationCircleIcon className="h-4 w-4" />
+                            {error.especie._errors[0]}
+                        </p>
+                    )}
+                </div>
+
+                <div>
                     <label className={labelBaseClasses} htmlFor="sintomas">
                         Síntomas y observaciones
                     </label>
@@ -271,9 +323,17 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                 </div>
 
                 <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-sm leading-6 text-slate-400">
-                        Usa información precisa para ofrecer una experiencia más confiable y profesional.
-                    </p>
+
+                    {paciente?.id && (
+                        <button
+                            type="button"
+                            className="inline-flex items-center justify-center rounded-2xl bg-linear-to-r from-red-400 via-red-500 to-red-600 px-6 py-3 text-sm font-bold uppercase tracking-[0.24em] text-slate-950 transition duration-200 hover:scale-[1.01] hover:shadow-lg hover:shadow-cyan-500/20"
+                            onClick={handleCancelar}
+                        >
+                            Cancelar
+                        </button>
+                    )}
+
 
                     <button
                         type="submit"
