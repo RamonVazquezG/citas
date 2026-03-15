@@ -63,7 +63,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
             }),
 
         especie: z
-            .enum(["Perro", "Gato", "Conejo", "Ave", "Pez", "Otro"], {
+            .enum(["Perro", "Gato", "Conejo", "Ave", "Otro"], {
                 message: "Campo obligatorio, por favor elija la especie de su mascota"
             }),
 
@@ -296,7 +296,6 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                         <option value="Gato">Gato</option>
                         <option value="Conejo">Conejo</option>
                         <option value="Ave">Ave</option>
-                        <option value="Pez">Pez</option>
                         <option value="Otro">Otro</option>
                     </select>
 

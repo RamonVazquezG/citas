@@ -42,10 +42,11 @@ const ListadoPacientes = ({ pacientes, setPacientes, setPaciente }) => {
                         <span>🐱</span>
                     </div>
                 </div>
-                )
-                :(
+                ) : (
                     <div className="custom-scrollbar max-h-195 space-y-4 overflow-y-auto pr-1">
-                        {pacientes.map((paciente) => (
+                        {pacientes
+                        .sort((a,b) => b.urgente - a.urgente)
+                        .map((paciente) => (
                             <Paciente
                                 key={paciente.id}
                                 paciente={paciente}

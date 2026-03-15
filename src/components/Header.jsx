@@ -2,7 +2,7 @@ import React from 'react'
 import { HeartIcon, SparklesIcon } from '@heroicons/react/24/solid'
 import { ShieldCheckIcon } from '@heroicons/react/24/outline'
 
-const Header = ({ cantidadPerros, cantidadGatos, cantidadConejos, cantidadAves, cantidadPeces, cantidadOtros, totalPacientes, modoEdicion }) => {
+const Header = ({ cantidadPerros, cantidadGatos, cantidadConejos, cantidadAves, cantidadUrgentes, cantidadOtros, totalPacientes, modoEdicion }) => {
   return (
     <header className="mb-8 overflow-hidden rounded-4xl border border-white/10 bg-white/8 p-6 shadow-2xl shadow-slate-950/30 backdrop-blur-xl sm:p-8 lg:mb-10 lg:p-10">
       <div className="pointer-events-none absolute right-8 top-6 hidden text-5xl opacity-10 lg:block">🐶</div>
@@ -63,13 +63,15 @@ const Header = ({ cantidadPerros, cantidadGatos, cantidadConejos, cantidadAves, 
             </div>
 
             <div className="rounded-3xl border border-white/10 bg-slate-900/70 p-5 shadow-lg shadow-cyan-950/30">
-              <p className="text-sm uppercase tracking-[0.24em] text-slate-400">Peces registradas</p>
-              <p className="mt-3 text-4xl font-black text-white">{cantidadPeces}</p>
+              <p className="text-sm uppercase tracking-[0.24em] text-slate-400">Otros registrados</p>
+              <p className="mt-3 text-4xl font-black text-white">{cantidadOtros}</p>
             </div>
 
             <div className="rounded-3xl border border-white/10 bg-slate-900/70 p-5 shadow-lg shadow-cyan-950/30">
-              <p className="text-sm uppercase tracking-[0.24em] text-slate-400">Otros registrados</p>
-              <p className="mt-3 text-4xl font-black text-white">{cantidadOtros}</p>
+              <p className="text-sm uppercase tracking-[0.24em] text-slate-400">Pacientes Urgentes</p>
+              <p className={`mt-3 text-4xl font-black ${cantidadUrgentes > 0 ? 'text-red-500' : 'text-white'}`}>
+                {cantidadUrgentes}
+              </p>
             </div>
           </div>
 

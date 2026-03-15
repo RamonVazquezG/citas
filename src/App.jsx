@@ -53,8 +53,8 @@ function App() {
           cantidadGatos={pacientes.filter(p => p.especie === 'Gato').length}
           cantidadConejos={pacientes.filter(p => p.especie === 'Conejo').length}
           cantidadAves={pacientes.filter(p => p.especie === 'Ave').length}
-          cantidadPeces={pacientes.filter(p => p.especie === 'Pez').length}
           cantidadOtros={pacientes.filter(p => p.especie === 'Otro').length}
+          cantidadUrgentes={pacientes.filter(p => p.urgente === true).length}
           totalPacientes={pacientes.length}
           modoEdicion={Boolean(paciente?.id)}
         />
