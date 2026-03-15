@@ -11,13 +11,14 @@ import {
     BugAntIcon,
 } from "@heroicons/react/24/outline";
 
-const Formulario = ({ pacientes, setPacientes, paciente, setPaciente, modoEdicion }) => {
+const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
     const [nombre, setNombre] = useState('');
     const [propietario, setPropietario] = useState('');
     const [email, setEmail] = useState('');
     const [fecha, setFecha] = useState('');
     const [especie, setEspecie] = useState('');
     const [sintomas, setSintomas] = useState('');
+    const [urgente, setUrgente] = useState(false);
     const [error, setError] = useState({});
 
     const notify = () => toast('Paciente Registrado');
@@ -35,6 +36,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente, modoEdicio
             setFecha(paciente.fecha || '')
             setEspecie(paciente.especie || '')
             setSintomas(paciente.sintomas || '')
+            setUrgente(paciente.urgente || false)
         }
     }, [paciente])
 
@@ -61,13 +63,14 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente, modoEdicio
             }),
 
         especie: z
-            .enum(["perro", "gato", "conejo", "ave", "otro"], {
+            .enum(["Perro", "Gato", "Conejo", "Ave", "Pez", "Otro"], {
                 message: "Campo obligatorio, por favor elija la especie de su mascota"
             }),
 
         sintomas: z
             .string()
             .min(10, "Describe los síntomas con al menos 10 caracteres"),
+        urgente: z.boolean().optional(),
     });
 
 
@@ -97,7 +100,8 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente, modoEdicio
             email,
             fecha,
             especie,
-            sintomas
+            sintomas,
+            urgente
         });
 
         if (!resultado.success) {
@@ -129,6 +133,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente, modoEdicio
         setFecha('');
         setEspecie('');
         setSintomas('');
+        setUrgente(false);
     };
 
     const handleCancelar = () => {
@@ -142,6 +147,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente, modoEdicio
         setFecha('');
         setEspecie('');
         setSintomas('');
+        setUrgente(false);
 
         // Limpiar cualquier error que pueda aparecer
         setError({});
@@ -286,11 +292,12 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente, modoEdicio
                         onChange={e => setEspecie(e.target.value)}
                     >
                         <option value="default">Seleccione una opción...</option>
-                        <option value="perro">Perro</option>
-                        <option value="gato">Gato</option>
-                        <option value="conejo">Conejo</option>
-                        <option value="ave">Ave</option>
-                        <option value="otro">otro</option>
+                        <option value="Perro">Perro</option>
+                        <option value="Gato">Gato</option>
+                        <option value="Conejo">Conejo</option>
+                        <option value="Ave">Ave</option>
+                        <option value="Pez">Pez</option>
+                        <option value="Otro">Otro</option>
                     </select>
 
                     {error?.especie?._errors[0] && (
@@ -320,6 +327,23 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente, modoEdicio
                             {error.sintomas._errors[0]}
                         </p>
                     )}
+                </div>
+
+                <div>
+                    <label className={labelBaseClasses} htmlFor="urgente">
+                        <span className="mb-2 flex items-center gap-2 text-slate-300">
+                            <ExclamationCircleIcon className="h-5 w-5 text-cyan-300" />
+                            Urgente
+
+                            <input
+                                type="checkbox"
+                                id="urgente"
+                                onChange={e => setUrgente(e.target.checked)}
+                                checked={urgente}
+                                className="ml-3 h-5 w-5 rounded border border-white/10 bg-slate-950/60 text-cyan-400 focus:ring-cyan-400/20"
+                            />
+                        </span>
+                    </label>
                 </div>
 
                 <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">

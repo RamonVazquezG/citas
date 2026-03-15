@@ -4,7 +4,7 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 
 const Paciente = ({ paciente, setPaciente, setPacientes }) => {
 
-    const { nombre, propietario, email, fecha, especie, sintomas, id } = paciente
+    const { nombre, propietario, email, fecha, especie, sintomas, urgente, id } = paciente
 
 
     const fechaFormateada = new Intl.DateTimeFormat('es-MX', {
@@ -22,14 +22,21 @@ const Paciente = ({ paciente, setPaciente, setPacientes }) => {
         toast.error('Paciente eliminado')
     }
 
+    const degradadoTarjetaNoUrgente = "from-cyan-400 via-blue-500 to-fuchsia-500";
+    const degradadoTarjetaUrgente = "from-rose-400 via-red-500 to-rose-500";
+    const textoUrgente = "text-red-300";
+    const textoNoUrgente = "text-cyan-300";
+    const hoverUrgente = "hover:border-rose-300/40";
+    const hoverNoUrgente = "hover:border-cyan-300/40";
+
     return (
-        <article className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-950/60 shadow-xl shadow-slate-950/20 transition duration-300 hover:-translate-y-1 hover:border-cyan-400/30">
-            <div className="h-1.5 w-full bg-linear-to-r from-cyan-400 via-blue-500 to-fuchsia-500" />
+        <article className={`overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-950/60 shadow-xl shadow-slate-950/20 transition duration-300 hover:-translate-y-1 ${urgente ? hoverUrgente : hoverNoUrgente}`}>
+            <div className={`h-1.5 w-full bg-linear-to-r ${urgente ? degradadoTarjetaUrgente : degradadoTarjetaNoUrgente}`} />
 
             <div className="p-5 sm:p-6">
                 <div className="mb-5 flex flex-col gap-3 border-b border-white/10 pb-5 sm:flex-row sm:items-start sm:justify-between">
                     <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">Paciente veterinario</p>
+                        <p className={`text-xs font-semibold uppercase tracking-[0.24em] ${urgente ? textoUrgente : textoNoUrgente}`}>Paciente veterinario</p>
                         <h3 className="mt-2 text-2xl font-black text-white">{nombre}</h3>
                         <p className="mt-1 text-sm text-slate-400">Responsable: {propietario}</p>
                         <div className="mt-3 flex flex-wrap gap-2">
@@ -64,6 +71,10 @@ const Paciente = ({ paciente, setPaciente, setPacientes }) => {
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Síntomas</p>
                     <p className="mt-2 text-sm leading-7 text-slate-300 sm:text-base">{sintomas}</p>
                 </div>
+
+                
+                <p className="mt-2 text-sm leading-7 text-red-500 sm:text-base">{urgente ? 'ES URGENTE' : ''}</p>
+                
 
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
                     <button

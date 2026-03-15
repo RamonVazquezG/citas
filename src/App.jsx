@@ -1,7 +1,7 @@
 import Header from "./components/Header.jsx"
 import ListadoPacientes from "./components/ListadoPacientes.jsx"
 import Formulario from "./components/Formulario.jsx"
-import {useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -49,6 +49,12 @@ function App() {
 
       <div className="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         <Header
+          cantidadPerros={pacientes.filter(p => p.especie === 'Perro').length}
+          cantidadGatos={pacientes.filter(p => p.especie === 'Gato').length}
+          cantidadConejos={pacientes.filter(p => p.especie === 'Conejo').length}
+          cantidadAves={pacientes.filter(p => p.especie === 'Ave').length}
+          cantidadPeces={pacientes.filter(p => p.especie === 'Pez').length}
+          cantidadOtros={pacientes.filter(p => p.especie === 'Otro').length}
           totalPacientes={pacientes.length}
           modoEdicion={Boolean(paciente?.id)}
         />
@@ -76,7 +82,6 @@ function App() {
             setPacientes={setPacientes}
             paciente={paciente}
             setPaciente={setPaciente}
-            modoEdicion={Boolean(paciente?.id)}
           />
 
           <ListadoPacientes
